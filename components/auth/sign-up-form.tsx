@@ -2,7 +2,9 @@
 
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
 	Form,
@@ -18,7 +20,7 @@ import { SignupSchema } from "@/schemas";
 import { FormError } from "@/components/common/form-error";
 import { FormSuccess } from "@/components/common/form-success";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { signup } from "@/actions/auth/signup";
 
 export const SignUpForm = () => {
 	// states to show form messages
@@ -41,8 +43,11 @@ export const SignUpForm = () => {
 	const onSubmit = (values: z.infer<typeof SignupSchema>) => {
 		setError("");
 		setSuccess("");
-		startTransition(() => {
+		startTransition(async () => {
 			// call signup action
+			const data = await signup(values);
+			setError(data.error);
+			setSuccess(data.success);
 		});
 	};
 	return (
