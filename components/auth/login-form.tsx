@@ -19,6 +19,7 @@ import { LoginSchema } from "@/schemas";
 import { FormError } from "@/components/common/form-error";
 import { FormSuccess } from "@/components/common/form-success";
 import { Button } from "@/components/ui/button";
+import { login } from "@/actions/auth/login";
 
 export const LoginForm = () => {
 	// states to show form messages
@@ -42,10 +43,20 @@ export const LoginForm = () => {
 	const onSubmit = (values: z.infer<typeof LoginSchema>) => {
 		setError("");
 		setSuccess("");
-		startTransition(() => {
+		startTransition(async () => {
 			// call signup action
+			try {
+				const data = await login(values);
+				if (data?.error) {
+					form.reset();
+					setError(data.error);
+				}
+			} catch (error) {
+				setError("Something went wrong!");
+			}
 		});
 	};
+
 	return (
 		<CardWrapper
 			headerLabel="Login to your account"
