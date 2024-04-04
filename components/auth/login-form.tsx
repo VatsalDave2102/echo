@@ -20,13 +20,19 @@ import { FormError } from "@/components/common/form-error";
 import { FormSuccess } from "@/components/common/form-success";
 import { Button } from "@/components/ui/button";
 import { login } from "@/actions/auth/login";
+import { useSearchParams } from "next/navigation";
 
 export const LoginForm = () => {
 	// states to show form messages
 	const [error, setError] = useState<string | undefined>();
 	const [success, setSuccess] = useState<string | undefined>();
 
-	// TODO: add two factor logic
+	// get error from url
+	const searchParams = useSearchParams();
+	const urlError =
+		searchParams.get("error") === "OAuthAccountNotLinked"
+			? "Email already in use with different provider"
+			: "";
 
 	// to show loading state during form submission
 	const [isPending, startTransition] = useTransition();
@@ -107,7 +113,7 @@ export const LoginForm = () => {
 							)}
 						/>
 					</div>
-					<FormError message={error} />
+					<FormError message={error || urlError} />
 					<FormSuccess message={success} />
 					<Button
 						type="submit"
