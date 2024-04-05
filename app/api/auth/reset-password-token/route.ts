@@ -1,22 +1,25 @@
-import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-// handler to get verification token
+import { db } from "@/lib/db";
+
+// handler to get reset password token from database
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
 
+	// extracting email and token from url params
 	const email = searchParams.get("email");
 	const token = searchParams.get("token");
+
 	try {
 		if (token && !email) {
 			// fetching from database
-			const verificationToken = await db.verificationToken.findUnique({
+			const passwordResetToken = await db.passwordResetToken.findUnique({
 				where: { token },
 			});
 
 			// send token if not null
-			if (verificationToken) {
-				return NextResponse.json(verificationToken, { status: 200 });
+			if (passwordResetToken) {
+				return NextResponse.json(passwordResetToken, { status: 200 });
 			} else {
 				return NextResponse.json(
 					{ error: "Token does not exist" },
@@ -25,13 +28,13 @@ export async function GET(request: NextRequest) {
 			}
 		} else if (email && !token) {
 			// fetching from database
-			const verificationToken = await db.verificationToken.findFirst({
+			const passwordResetToken = await db.passwordResetToken.findFirst({
 				where: { email },
 			});
 
 			// send token if not null
-			if (verificationToken) {
-				return NextResponse.json(verificationToken, { status: 200 });
+			if (passwordResetToken) {
+				return NextResponse.json(passwordResetToken, { status: 200 });
 			} else {
 				return NextResponse.json(
 					{ error: "Token does not exist" },
@@ -53,21 +56,20 @@ export async function GET(request: NextRequest) {
 	}
 }
 
-interface VerificationTokenData {
+interface PasswordResetTokenData {
 	token: string;
 	email: string;
 	expires: Date;
 }
 
-// handler to store verification token in database
+// handler to create new reset password token
 export async function POST(request: NextRequest) {
-	const values: VerificationTokenData = await request.json();
+	const values: PasswordResetTokenData = await request.json();
 
 	const { token, email, expires } = values;
 
-	// storing token in database
 	try {
-		const verificationToken = await db.verificationToken.create({
+		const passwordResetToken = await db.passwordResetToken.create({
 			data: {
 				email,
 				token,
@@ -75,18 +77,21 @@ export async function POST(request: NextRequest) {
 			},
 		});
 
-		return NextResponse.json(verificationToken, { status: 201 });
+		return NextResponse.json(passwordResetToken, { status: 201 });
 	} catch (error) {
-		return NextResponse.json({ error: error }, { status: 500 });
+		return NextResponse.json(
+			{ error: "Failed to create token" },
+			{ status: 500 }
+		);
 	}
 }
 
-// handler to delete the verification token from database
+// handler to delete reset password token
 export async function DELETE(request: NextRequest) {
 	const value: { id: string } = await request.json();
 
 	try {
-		await db.verificationToken.delete({
+		await db.passwordResetToken.delete({
 			where: {
 				id: value.id,
 			},

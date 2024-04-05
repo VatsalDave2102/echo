@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
@@ -111,6 +112,14 @@ export const LoginForm = () => {
 											disabled={isPending}
 										/>
 									</FormControl>
+									<Button
+										size="sm"
+										variant="link"
+										asChild
+										className="px-0 font-normal"
+									>
+										<Link href="/auth/reset">Forgot password?</Link>
+									</Button>
 									<FormMessage />
 								</FormItem>
 							)}
