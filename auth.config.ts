@@ -17,16 +17,19 @@ export default {
 		Credentials({
 			async authorize(credentials) {
 				// call login api
-				const result = await fetch(`${process.env.BASE_URL}/api/auth/login`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						email: credentials.email,
-						password: credentials.password,
-					}),
-				});
+				const result = await fetch(
+					`${process.env.NEXT_PUBLIC_APP_URL}/api/auth/login`,
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							email: credentials.email,
+							password: credentials.password,
+						}),
+					}
+				);
 
 				const user = await result.json();
 				if (user.id) {

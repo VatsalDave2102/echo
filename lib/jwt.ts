@@ -26,7 +26,6 @@ export function verifyJwt(token: string) {
 		return decoded as JwtPayload;
 	} catch (error) {
 		if (error instanceof jwt.TokenExpiredError) {
-			console.log("session expired");
 			return Response.redirect("/auth/login");
 		}
 		return null;

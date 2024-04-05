@@ -1,6 +1,9 @@
-import { getUserByEmail } from "@/data/user";
-import { SignupSchema } from "@/schemas";
 import * as z from "zod";
+
+import { SignupSchema } from "@/schemas";
+import { getUserByEmail } from "@/data/user";
+import { sendVerificationEmail } from "@/lib/mail";
+import { generateVerificationToken } from "@/lib/tokens";
 
 export const signup = async (values: z.infer<typeof SignupSchema>) => {
 	// field validation
@@ -32,8 +35,14 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
 		body: JSON.stringify({ name, email, password }),
 	});
 
+	// generating verification token
+	const verificationToken = await generateVerificationToken(email);
+
+	// sending mail to verify token
+	await sendVerificationEmail(verificationToken.email, verificationToken.token);
+
 	if (result.ok) {
-		return { success: "User created successfully!" };
+		return { success: "Confirmation email sent!" };
 	} else {
 		return { error: "Failed to create user!" };
 	}

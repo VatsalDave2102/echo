@@ -27,6 +27,17 @@ export const {
 		},
 	},
 	callbacks: {
+		async signIn({ user, account }) {
+			// allow OAuth without verification
+			if (account?.provider !== "credentials") return true;
+
+			const exisitingUser = await getUserById(user.id!);
+
+			// prevent login without verifcation
+			if (!exisitingUser?.emailVerified) return false;
+
+			return true;
+		},
 		async jwt({ token, user }) {
 			if (!token.sub) return { ...token, ...user };
 
