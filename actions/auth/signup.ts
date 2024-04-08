@@ -18,14 +18,6 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
 
 	const { name, email, password } = validatedFields.data;
 
-	// check if user already exists
-	const existingUser = await getUserByEmail(email);
-	if (existingUser) {
-		return {
-			error: "Email already in use!",
-		};
-	}
-
 	// create user
 	const result = await fetch(`/api/user`, {
 		method: "POST",
