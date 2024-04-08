@@ -4,6 +4,8 @@ import { SessionProvider } from "next-auth/react";
 
 import "./globals.css";
 import { auth } from "@/auth";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { cn } from "@/lib/utils";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -20,8 +22,17 @@ export default async function RootLayout({
 	const session = await auth();
 	return (
 		<SessionProvider session={session}>
-			<html lang="en">
-				<body className={font.className}>{children}</body>
+			<html lang="en" suppressHydrationWarning>
+				<body className={cn(font.className, "bg-white dark:bg-[#313338]")}>
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="dark"
+						enableSystem={false}
+						storageKey="echo-theme"
+					>
+						{children}
+					</ThemeProvider>
+				</body>
 			</html>
 		</SessionProvider>
 	);

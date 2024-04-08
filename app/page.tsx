@@ -1,13 +1,11 @@
 import UserButton from "@/components/auth/user-button";
+import { ModeToggle } from "@/components/common/mode-toggle";
 
 export default function Home() {
-	const onClick = async () => {
-		await logout();
-	};
-	const session = useSession();
 	return (
 		<div>
 			<UserButton />
+			<ModeToggle />
 		</div>
 	);
 }

@@ -36,7 +36,6 @@ export const LoginForm = () => {
 	const [success, setSuccess] = useState<string | undefined>();
 	const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
 
-
 	// get error from url
 	const searchParams = useSearchParams();
 	const urlError =
@@ -171,53 +170,6 @@ export const LoginForm = () => {
 								/>
 							</>
 						)}
-						{/* Email field */}
-						<FormField
-							control={control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="Enter your email"
-											type="email"
-											disabled={isPending}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						{/* Password field */}
-						<FormField
-							control={control}
-							name="password"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Password</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="Create password"
-											type="password"
-											disabled={isPending}
-										/>
-									</FormControl>
-									<Button
-										size="sm"
-										variant="link"
-										asChild
-										className="px-0 font-normal"
-									>
-										<Link href="/auth/reset">Forgot password?</Link>
-									</Button>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
 					</div>
 					<FormError message={error || urlError} />
 					<FormSuccess message={success} />
