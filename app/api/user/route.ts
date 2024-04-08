@@ -64,6 +64,14 @@ export async function POST(request: NextRequest) {
 
 	const { name, email, password } = validatedFields.data;
 
+	const existingUser = await db.user.findUnique({
+		where: { email },
+	});
+
+	if (existingUser) {
+		return NextResponse.json({ error: "User already exist" }, { status: 400 });
+	}
+
 	const hashedPassword = await bcryptjs.hash(password, 10);
 
 	// creating user in database
