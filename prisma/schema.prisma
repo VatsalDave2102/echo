@@ -30,8 +30,10 @@ model User {
   password              String?
   role                  UserRole  @default(USER)
   accounts              Account[]
+  
   isTwoFactorEnabled    Boolean   @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+ 
 }
 
 model Account {
@@ -52,6 +54,18 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model Profile {
+  id                    String    @id @default(uuid())
+  userId                String    @unique
+  name                  String
+  imageUrl              String    @db.Text
+  email                 String    @db.Text
+  servers               Server[]
+  members               Member[]
+  channels              Channel[]
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
 // model of verification token sent via emails to verify emails
 model VerificationToken {
   id                    String    @id @default(cuid())
@@ -89,4 +103,65 @@ model TwoFactorConfirmation{
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+// model for server
+model Server {
+  id                    String    @id @default(uuid())
+  name                  String
+  imageUrl              String    @db.Text
+  inviteCode            String    @db.Text
+  profileId             String
+  profile               Profile   @relation(fields: [ profileId], references: [id], onDelete: Cascade)
+  members               Member[]
+  channels              Channel[]
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([profileId])
+}
+
+// enum for member role
+enum MemberRole {
+  ADMIN
+  MODERATOR
+  GUEST
+}
+
+// model for server members
+model Member {
+  id                    String      @id @default(uuid())
+  role                  MemberRole  @default(GUEST)
+  profileId             String
+  profile               Profile     @relation (fields: [profileId], references: [id], onDelete: Cascade)
+  serverId              String
+  server                Server      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
+}
+
+// enum for Channel Type
+enum ChannelType {
+  TEXT
+  AUDIO
+  VIDEO
+}
+
+// model for Channel
+model Channel {
+  id                    String      @id @default(uuid())
+  name                  String
+  type                  ChannelType @default(TEXT)
+  profileId             String
+  profile               Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  serverId              String
+  server                Server      @relation(fields: [serverId], references: [id], onDelete:  Cascade)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
 }
