@@ -1,9 +1,11 @@
 "use client";
 
 import * as z from "zod";
+import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState, useTransition } from "react";
 
 import {
 	Dialog,
@@ -29,7 +31,7 @@ import { FileUpload } from "@/components/common/file-upload";
 export const InitialModal = () => {
 	// state to check whether modal mounted or not, due to hydration error
 	const [isMounted, setIsMounted] = useState(false);
-
+	const router = useRouter();
 	// effect to set isMounted true once the modal mounts
 	useEffect(() => {
 		setIsMounted(true);
@@ -47,6 +49,11 @@ export const InitialModal = () => {
 	const { handleSubmit, control } = form;
 	const onSubmit = async (values: z.infer<typeof ServerFormSchema>) => {
 		// call server api
+		await axios.post("/api/servers", values);
+
+		form.reset();
+		router.refresh();
+		window.location.reload();
 	};
 
 	if (!isMounted) {
@@ -112,7 +119,7 @@ export const InitialModal = () => {
 							/>
 						</div>
 						<DialogFooter className="bg-gray-100 px-6 py-4">
-							<Button disabled={isPending} variant={"rose"}>
+							<Button disabled={isPending} variant={"rose"} type="submit">
 								Create
 							</Button>
 						</DialogFooter>
