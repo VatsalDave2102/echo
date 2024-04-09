@@ -2,10 +2,10 @@
 
 import * as z from "zod";
 import axios from "axios";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState, useTransition } from "react";
 
 import {
 	Dialog,
@@ -26,18 +26,21 @@ import {
 import { ServerFormSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/hooks/use-modal-store";
 import { FileUpload } from "@/components/common/file-upload";
 
-export const InitialModal = () => {
-	// state to check whether modal mounted or not, due to hydration error
-	const [isMounted, setIsMounted] = useState(false);
+export const CreateServerModal = () => {
+	// hook to modal state
+	const { isOpen, onClose, type } = useModal();
 	const router = useRouter();
-	// effect to set isMounted true once the modal mounts
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
 
+	// boolean to open/close modal
+	const isModalOpen = isOpen && type === "createServer";
+
+	// transition to disable fields
 	const [isPending, startTransition] = useTransition();
+
+	// react hook form
 	const form = useForm<z.infer<typeof ServerFormSchema>>({
 		resolver: zodResolver(ServerFormSchema),
 		defaultValues: {
@@ -47,22 +50,26 @@ export const InitialModal = () => {
 	});
 
 	const { handleSubmit, control } = form;
+
+	// form submit handler
 	const onSubmit = async (values: z.infer<typeof ServerFormSchema>) => {
 		// call server api
 		startTransition(async () => {
 			await axios.post("/api/servers", values);
 			form.reset();
 			router.refresh();
-			window.location.reload();
+			onClose();
 		});
 	};
 
-	if (!isMounted) {
-		return null;
-	}
+	// handler to close modal
+	const handleClose = () => {
+		form.reset();
+		onClose();
+	};
 
 	return (
-		<Dialog open>
+		<Dialog open={isModalOpen} onOpenChange={handleClose}>
 			<DialogContent className="bg-white text-black p-0 overflow-hidden">
 				{/* Form heading */}
 				<DialogHeader className="pt-8 px-6">

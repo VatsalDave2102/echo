@@ -1,5 +1,3 @@
-"use client";
-
 import { FaUser } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -8,12 +6,12 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { currentUser } from "@/lib/auth";
 import LogoutButon from "@/components/auth/logout-button";
 import { ExitIcon } from "@radix-ui/react-icons";
 
-export default function UserButton() {
-	const user = useCurrentUser();
+export default async function UserButton() {
+	const user = await currentUser();
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger>
