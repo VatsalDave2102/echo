@@ -24,6 +24,7 @@ import {
 import { ServerFormSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FileUpload } from "@/components/common/file-upload";
 
 export const InitialModal = () => {
 	// state to check whether modal mounted or not, due to hydration error
@@ -45,7 +46,7 @@ export const InitialModal = () => {
 
 	const { handleSubmit, control } = form;
 	const onSubmit = async (values: z.infer<typeof ServerFormSchema>) => {
-		console.log(values);
+		// call server api
 	};
 
 	if (!isMounted) {
@@ -71,7 +72,21 @@ export const InitialModal = () => {
 						<div className="space-y-8 px-6">
 							{/* Image upload field */}
 							<div className="flex items-center justify-center text-center">
-								{/* TODO: image upload */}
+								<FormField
+									control={control}
+									name="imageUrl"
+									render={({ field }) => (
+										<FormItem>
+											<FormControl>
+												<FileUpload
+													endpoint="serverImage"
+													value={field.value}
+													onChange={field.onChange}
+												/>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
 							</div>
 
 							{/* Server name field */}
