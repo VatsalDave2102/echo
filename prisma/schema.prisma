@@ -30,10 +30,8 @@ model User {
   password              String?
   role                  UserRole  @default(USER)
   accounts              Account[]
-  
   isTwoFactorEnabled    Boolean   @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
- 
 }
 
 model Account {
@@ -58,7 +56,7 @@ model Profile {
   id                    String    @id @default(uuid())
   userId                String    @unique
   name                  String
-  imageUrl              String    @db.Text
+  imageUrl              String?    @db.Text
   email                 String    @db.Text
   servers               Server[]
   members               Member[]
