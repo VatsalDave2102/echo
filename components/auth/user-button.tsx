@@ -17,7 +17,7 @@ export default function UserButton() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger>
-				<Avatar>
+				<Avatar className="w-[48px] h-[48px]">
 					<AvatarImage src={user?.image || ""} />
 					<AvatarFallback className="bg-rose-500">
 						<FaUser className="text-white" />
