@@ -22,7 +22,7 @@ export default async function UserButton() {
 					</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-40" align="end">
+			<DropdownMenuContent className="w-40 bg-[#222222]" align="end">
 				<LogoutButon>
 					<DropdownMenuItem>
 						<ExitIcon className="h-4 w-4 mr-2" />
