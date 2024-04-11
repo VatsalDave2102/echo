@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { ChannelType } from "@prisma/client";
 
 export const SignupSchema = z.object({
 	name: z.string().min(2, { message: "Name is required!" }),
@@ -35,4 +36,14 @@ export const ServerFormSchema = z.object({
 	imageUrl: z.string().min(1, {
 		message: "Server image is required!",
 	}),
+});
+
+export const ChannelFormSchema = z.object({
+	name: z
+		.string()
+		.min(1, { message: "Channel name is required" })
+		.refine((name) => name !== "general", {
+			message: `Channel name cannot be "general"`,
+		}),
+	type: z.nativeEnum(ChannelType),
 });
