@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { ChannelType } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +37,9 @@ import { useModal } from "@/hooks/use-modal-store";
 
 export const CreateChannelModal = () => {
 	// hook to modal state
-	const { isOpen, onClose, type } = useModal();
+	const { isOpen, onClose, type, data } = useModal();
+	const { channelType } = data;
+
 	const router = useRouter();
 	const params = useParams();
 
@@ -52,9 +54,17 @@ export const CreateChannelModal = () => {
 		resolver: zodResolver(ChannelFormSchema),
 		defaultValues: {
 			name: "",
-			type: ChannelType.TEXT,
+			type: ChannelType.TEXT || channelType,
 		},
 	});
+
+	useEffect(() => {
+		if (channelType) {
+			form.setValue("type", channelType);
+		} else {
+			form.setValue("type", ChannelType.TEXT);
+		}
+	}, [channelType, form]);
 
 	const { handleSubmit, control } = form;
 
