@@ -35,16 +35,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 
-export const CreateChannelModal = () => {
+export const EditChannelModal = () => {
 	// hook for modal state
 	const { isOpen, onClose, type, data } = useModal();
-	const { channelType } = data;
+	const { channel, server } = data;
 
 	const router = useRouter();
 	const params = useParams();
 
 	// boolean to open/close modal
-	const isModalOpen = isOpen && type === "createChannel";
+	const isModalOpen = isOpen && type === "editChannel";
 
 	// transition to disable fields
 	const [isPending, startTransition] = useTransition();
@@ -54,17 +54,16 @@ export const CreateChannelModal = () => {
 		resolver: zodResolver(ChannelFormSchema),
 		defaultValues: {
 			name: "",
-			type: ChannelType.TEXT || channelType,
+			type: channel?.type || ChannelType.TEXT,
 		},
 	});
 
 	useEffect(() => {
-		if (channelType) {
-			form.setValue("type", channelType);
-		} else {
-			form.setValue("type", ChannelType.TEXT);
+		if (channel) {
+			form.setValue("name", channel.name);
+			form.setValue("type", channel.type);
 		}
-	}, [channelType, form]);
+	}, [form, channel]);
 
 	const { handleSubmit, control } = form;
 
@@ -72,7 +71,10 @@ export const CreateChannelModal = () => {
 	const onSubmit = async (values: z.infer<typeof ChannelFormSchema>) => {
 		// call channels api to create channel
 		startTransition(async () => {
-			await axios.post(`/api/channels?serverId=${params?.serverId}`, values);
+			await axios.patch(
+				`/api/channels/${channel?.id}?serverId=${params?.serverId}`,
+				values
+			);
 			form.reset();
 			router.refresh();
 			onClose();
@@ -91,7 +93,7 @@ export const CreateChannelModal = () => {
 				{/* Form heading */}
 				<DialogHeader className="pt-8 px-6">
 					<DialogTitle className="text-2xl text-center">
-						Create a Channel
+						Edit Channel
 					</DialogTitle>
 				</DialogHeader>
 				<Form {...form}>
@@ -154,7 +156,7 @@ export const CreateChannelModal = () => {
 						</div>
 						<DialogFooter className="bg-gray-100 px-6 py-4">
 							<Button disabled={isPending} variant={"rose"} type="submit">
-								Create
+								Save
 							</Button>
 						</DialogFooter>
 					</form>
