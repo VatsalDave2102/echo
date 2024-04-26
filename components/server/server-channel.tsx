@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useModal } from "@/hooks/use-modal-store";
+import { ModalType, useModal } from "@/hooks/use-modal-store";
 import { useParams, useRouter } from "next/navigation";
 import { Edit, Hash, Lock, Mic, Trash, Video } from "lucide-react";
 import { ActionTooltip } from "@/components/common/action-tooltip";
@@ -30,8 +30,21 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 	const params = useParams();
 
 	const Icon = iconMap[channel.type];
+
+	// redirect user to channel conversation
+	const onClick = () => {
+		router.push(`/servers/${params?.serverId}/channels/${channel.id}`);
+	};
+
+	// to prevent event propagation, when edit/delete is clicked,
+	// the onClick handler on channel button is also trigger
+	const onAction = (e: React.MouseEvent, action: ModalType) => {
+		e.stopPropagation();
+		onOpen(action, { server, channel });
+	};
 	return (
 		<button
+			onClick={onClick}
 			className={cn(
 				"group px-2 py-2 rounded-md flex items-center gap-x-2 w-full hover:bg-neutral-700/10 dark:hover:bg-neutral-700/50 transition mb-1",
 				params?.channelId === channel.id &&
@@ -54,13 +67,13 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 				<div className="ml-auto flex items-center gap-x-2">
 					<ActionTooltip label="Edit">
 						<Edit
-							onClick={() => onOpen("editChannel", { server, channel })}
+							onClick={(e) => onAction(e, "editChannel")}
 							className="h-4 w-4 hidden group-hover:block text-neutral-500 hover:text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-300 tranistion"
 						/>
 					</ActionTooltip>
 					<ActionTooltip label="Delete">
 						<Trash
-							onClick={() => onOpen("deleteChannel", { server, channel })}
+							onClick={(e) => onAction(e, "deleteChannel")}
 							className="h-4 w-4 hidden group-hover:block text-neutral-500 hover:text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-300 tranistion"
 						/>
 					</ActionTooltip>
