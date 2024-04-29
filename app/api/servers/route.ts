@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { MemberRole } from "@prisma/client";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/auth";
+import { currentProfile } from "@/lib/current-profile";
 import { NextRequest, NextResponse } from "next/server";
 
 // handler to create server and store it

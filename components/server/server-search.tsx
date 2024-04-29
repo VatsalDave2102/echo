@@ -69,7 +69,7 @@ export const ServerSearch: React.FC<ServerSearchProps> = ({ data }) => {
 		<>
 			<button
 				onClick={() => setOpen(true)}
-				className="group px-2 py-2 rounded-md flex items-center gap-x-2 w-full bg-neutral-700/10 dark:hover:bg-neutral-700/50 transition"
+				className="group px-2 py-2 rounded-md flex items-center gap-x-2 w-full zinc-700/10 dark:hover:bg-zinc-700/50 transition"
 			>
 				<Search className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
 				<p className="font-semibold text-sm text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 tranistion">

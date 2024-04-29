@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/auth";
+import { currentProfile } from "@/lib/current-profile";
 import ChatHeader from "@/components/chat/chat-header";
 import { getOrCreateConversation } from "@/lib/conversation";
 
@@ -11,6 +11,7 @@ interface MemberIdPageProps {
 		serverId: string;
 	};
 }
+
 export default async function MemberIdPage({ params }: MemberIdPageProps) {
 	const profile = await currentProfile();
 

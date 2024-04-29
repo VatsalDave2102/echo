@@ -1,6 +1,7 @@
-import { currentProfile } from "@/lib/auth";
-import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+
+import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/current-profile";
 
 // handler to leave server
 export async function PATCH(

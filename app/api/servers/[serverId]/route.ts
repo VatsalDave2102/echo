@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/auth";
+import { currentProfile } from "@/lib/current-profile";
 
 // handler to update server settings
 export async function PATCH(

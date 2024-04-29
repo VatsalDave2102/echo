@@ -1,7 +1,8 @@
-import { currentProfile } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+
 import { db } from "@/lib/db";
 import { MemberRole } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import { currentProfile } from "@/lib/current-profile";
 
 // handler to create channels
 export async function POST(request: NextRequest) {

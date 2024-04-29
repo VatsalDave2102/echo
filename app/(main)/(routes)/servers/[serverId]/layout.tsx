@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
-import { currentProfile } from "@/lib/auth";
+import { currentProfile } from "@/lib/current-profile";
 import { ServerSidebar } from "@/components/server/server-sidebar";
 
 export default async function ServerIdLayout({

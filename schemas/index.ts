@@ -47,3 +47,7 @@ export const ChannelFormSchema = z.object({
 		}),
 	type: z.nativeEnum(ChannelType),
 });
+
+export const ChatInputSchema = z.object({
+	content: z.string().min(1),
+});
