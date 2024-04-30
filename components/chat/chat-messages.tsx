@@ -1,0 +1,84 @@
+"use client";
+
+import { Loader2, ServerCrash } from "lucide-react";
+import { Member } from "@prisma/client";
+
+import { useChatQuery } from "@/hooks/use-chat-query";
+import ChatWelcome from "@/components/chat/chat-welcome";
+import { Fragment } from "react";
+import { MessageWithMemberWithProfile } from "@/types";
+
+interface ChatMessagesProps {
+	name: string;
+	member: Member;
+	chatId: string;
+	apiUrl: string;
+	socketUrl: string;
+	socketQuery: Record<string, string>;
+	paramKey: "channelId" | "conversationId";
+	paramValue: string;
+	type: "channel" | "conversation";
+}
+
+const ChatMessages: React.FC<ChatMessagesProps> = ({
+	name,
+	member,
+	chatId,
+	apiUrl,
+	socketUrl,
+	socketQuery,
+	paramKey,
+	paramValue,
+	type,
+}) => {
+	const queryKey = `chat:${chatId}`;
+
+	const { data, hasNextPage, fetchNextPage, isFetchingNextPage, status } =
+		useChatQuery({
+			queryKey,
+			apiUrl,
+			paramKey,
+			paramValue,
+		});
+
+	// if messages are loading
+	if (status === "loading") {
+		<div className="flex flex-col flex-1 justify-center items-center">
+			<Loader2 className="h-7 w-7 text-zinc-500 animate-spin my-4" />
+			<p className="text-xs text-zinc-500 dark:text-zinc-400">
+				Loading messages...
+			</p>
+		</div>;
+	}
+
+	// if there is an issue while fetching messages
+	if (status === "error") {
+		return (
+			<div className="flex flex-col flex-1 justify-center items-center">
+				<ServerCrash className="h-7 w-7 text-zinc-500 my-4" />
+				<p className="text-xs text-zinc-500 dark:text-zinc-400">
+					Something went wrong...
+				</p>
+			</div>
+		);
+	}
+
+	// display messages
+	return (
+		<div className="flex-1 flex flex-col py-4 overflow-y-auto">
+			{!hasNextPage && <div className="flex-1" />}
+			{!hasNextPage && <ChatWelcome type={type} name={name} />}
+			<div className="flex flex-col reverse mt-auto">
+				{data?.pages?.map((group, i) => (
+					<Fragment key={i}>
+						{group.items.map((message: MessageWithMemberWithProfile) => (
+							<div key={message.id}>{message.content}</div>
+						))}
+					</Fragment>
+				))}
+			</div>
+		</div>
+	);
+};
+
+export default ChatMessages;
