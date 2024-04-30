@@ -14,7 +14,7 @@ export default async function ServerIdLayout({
 	const profile = await currentProfile();
 
 	if (!profile) {
-		redirect("/auth/login");
+		redirect("/sign-in");
 	}
 
 	const server = await db.server.findUnique({

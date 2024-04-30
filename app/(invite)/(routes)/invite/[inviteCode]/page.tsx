@@ -14,7 +14,7 @@ export default async function InviteCodePage({ params }: InviteCodePageProps) {
 	const profile = await currentProfile();
 
 	if (!profile) {
-		redirect("/auth/login");
+		redirect("/sign-in");
 	}
 
 	// if no invite code found
