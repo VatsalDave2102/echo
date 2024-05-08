@@ -9,6 +9,7 @@ import ChatItem from "@/components/chat/chat-item";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { MessageWithMemberWithProfile } from "@/types";
 import ChatWelcome from "@/components/chat/chat-welcome";
+import { useChatSocket } from "@/hooks/use-chat-socket";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -36,6 +37,8 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 	type,
 }) => {
 	const queryKey = `chat:${chatId}`;
+	const addKey = `chat:${chatId}:messages`;
+	const updateKey = `chat:${chatId}:messages:update`;
 
 	const { data, hasNextPage, fetchNextPage, isFetchingNextPage, status } =
 		useChatQuery({
@@ -44,6 +47,8 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 			paramKey,
 			paramValue,
 		});
+
+	useChatSocket({ queryKey, addKey, updateKey });
 
 	// if messages are loading
 	if (status === "loading") {
@@ -75,21 +80,23 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 			<div className="flex flex-col reverse mt-auto">
 				{data?.pages?.map((group, i) => (
 					<Fragment key={i}>
-						{group.items.map((message: MessageWithMemberWithProfile) => (
-							<ChatItem
-								id={message.id}
-								key={message.id}
-								currentMember={member}
-								member={message.member}
-								content={message.content}
-								fileUrl={message.fileUrl}
-								deleted={message.deleted}
-								timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
-								isUpdated={message.updatedAt !== message.createdAt}
-								socketUrl={socketUrl}
-								socketQuery={socketQuery}
-							/>
-						))}
+						{group.items
+							.reverse()
+							.map((message: MessageWithMemberWithProfile) => (
+								<ChatItem
+									id={message.id}
+									key={message.id}
+									currentMember={member}
+									member={message.member}
+									content={message.content}
+									fileUrl={message.fileUrl}
+									deleted={message.deleted}
+									timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+									isUpdated={message.updatedAt !== message.createdAt}
+									socketUrl={socketUrl}
+									socketQuery={socketQuery}
+								/>
+							))}
 					</Fragment>
 				))}
 			</div>
