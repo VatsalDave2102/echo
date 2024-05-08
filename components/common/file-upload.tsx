@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { FileInput, X } from "lucide-react";
+import { FileIcon, X } from "lucide-react";
 
 import { UploadDropzone } from "@/lib/uploadthing";
 
@@ -37,7 +37,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 	if (value && fileType === "pdf") {
 		return (
 			<div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
-				<FileInput className="h-10 w-10 fill-rose-200 stroke-rose-400" />
+				<FileIcon className="h-10 w-10 fill-rose-200 stroke-rose-400" />
 				<a
 					href={value}
 					target="_black"
