@@ -6,15 +6,22 @@ import { currentProfile } from "@/lib/current-profile";
 import ChatHeader from "@/components/chat/chat-header";
 import ChatMessages from "@/components/chat/chat-messages";
 import { getOrCreateConversation } from "@/lib/conversation";
+import { MediaRoom } from "@/components/common/media-room";
 
 interface MemberIdPageProps {
 	params: {
 		memberId: string;
 		serverId: string;
 	};
+	searchParmas: {
+		video?: boolean;
+	};
 }
 
-export default async function MemberIdPage({ params }: MemberIdPageProps) {
+export default async function MemberIdPage({
+	params,
+	searchParmas,
+}: MemberIdPageProps) {
 	const profile = await currentProfile();
 
 	if (!profile) {
@@ -60,27 +67,34 @@ export default async function MemberIdPage({ params }: MemberIdPageProps) {
 				serverId={params.serverId}
 				type="conversation"
 			/>
-			<ChatMessages
-				member={currentMember}
-				name={otherMember.profile.name}
-				chatId={conversation.id}
-				type="conversation"
-				apiUrl="/api/direct-messages"
-				paramKey="conversationId"
-				paramValue={conversation.id}
-				socketUrl="/api/socket/direct-messages"
-				socketQuery={{
-					conversationId: conversation.id,
-				}}
-			/>
-			<ChatInput
-				name={otherMember.profile.name}
-				type="conversation"
-				apiUrl="/api/socket/direct-messages"
-				query={{
-					conversationId: conversation.id,
-				}}
-			/>
+			{searchParmas.video && (
+				<MediaRoom chatId={conversation.id} video={true} audio={true} />
+			)}
+			{!searchParmas.video && (
+				<>
+					<ChatMessages
+						member={currentMember}
+						name={otherMember.profile.name}
+						chatId={conversation.id}
+						type="conversation"
+						apiUrl="/api/direct-messages"
+						paramKey="conversationId"
+						paramValue={conversation.id}
+						socketUrl="/api/socket/direct-messages"
+						socketQuery={{
+							conversationId: conversation.id,
+						}}
+					/>
+					<ChatInput
+						name={otherMember.profile.name}
+						type="conversation"
+						apiUrl="/api/socket/direct-messages"
+						query={{
+							conversationId: conversation.id,
+						}}
+					/>
+				</>
+			)}
 		</div>
 	);
 }
