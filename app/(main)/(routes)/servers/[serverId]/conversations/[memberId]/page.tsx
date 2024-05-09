@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
 import { db } from "@/lib/db";
 import ChatInput from "@/components/chat/chat-input";
@@ -13,19 +14,19 @@ interface MemberIdPageProps {
 		memberId: string;
 		serverId: string;
 	};
-	searchParmas: {
+	searchParams: {
 		video?: boolean;
 	};
 }
 
 export default async function MemberIdPage({
 	params,
-	searchParmas,
+	searchParams,
 }: MemberIdPageProps) {
 	const profile = await currentProfile();
 
 	if (!profile) {
-		redirect("/login");
+		return auth().redirectToSignIn();
 	}
 
 	// gettting current member
@@ -67,10 +68,10 @@ export default async function MemberIdPage({
 				serverId={params.serverId}
 				type="conversation"
 			/>
-			{searchParmas.video && (
+			{searchParams.video && (
 				<MediaRoom chatId={conversation.id} video={true} audio={true} />
 			)}
-			{!searchParmas.video && (
+			{!searchParams.video && (
 				<>
 					<ChatMessages
 						member={currentMember}
