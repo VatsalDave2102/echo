@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
 import { db } from "@/lib/db";
 import { currentUser, auth } from "@clerk/nextjs/server";
 
