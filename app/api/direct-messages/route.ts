@@ -1,11 +1,11 @@
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { Message } from "@prisma/client";
+import { DirectMessage } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 const MESSAGES_BATCH = 10;
 
-// handler to fetch messages
+// handler to fetch direct messages
 export async function GET(request: NextRequest) {
 	try {
 		const profile = await currentProfile();
@@ -13,31 +13,31 @@ export async function GET(request: NextRequest) {
 
 		// get cursor and channelId from search params
 		const cursor = searchParams.get("cursor");
-		const channelId = searchParams.get("channelId");
+		const conversationId = searchParams.get("conversationId");
 
 		if (!profile) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
-		if (!channelId) {
+		if (!conversationId) {
 			return NextResponse.json(
-				{ error: "Channel ID missing" },
+				{ error: "Conversation ID missing" },
 				{ status: 400 }
 			);
 		}
 
-		let messages: Message[] = [];
+		let messages: DirectMessage[] = [];
 
 		// if cursor is present
 		if (cursor) {
-			messages = await db.message.findMany({
+			messages = await db.directMessage.findMany({
 				take: MESSAGES_BATCH,
 				skip: 1,
 				cursor: {
 					id: cursor,
 				},
 				where: {
-					channelId,
+					conversationId,
 				},
 				include: {
 					member: {
@@ -51,9 +51,9 @@ export async function GET(request: NextRequest) {
 				},
 			});
 		} else {
-			messages = await db.message.findMany({
+			messages = await db.directMessage.findMany({
 				take: MESSAGES_BATCH,
-				where: { channelId },
+				where: { conversationId },
 				include: {
 					member: {
 						include: {

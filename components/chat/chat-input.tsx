@@ -2,6 +2,7 @@
 
 import * as z from "zod";
 import axios from "axios";
+import qs from "query-string";
 import { Plus } from "lucide-react";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -39,11 +40,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ apiUrl, query, name, type }) => {
 
 	const onSubmit = (values: z.infer<typeof ChatInputSchema>) => {
 		try {
+			const url = qs.stringifyUrl({
+				url: apiUrl,
+				query,
+			});
 			startTransition(async () => {
-				await axios.post(
-					`${apiUrl}?serverId=${query.serverId}&channelId=${query.channelId}`,
-					values
-				);
+				await axios.post(url, values);
 				reset();
 				router.refresh();
 			});
