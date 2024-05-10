@@ -47,22 +47,25 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 			onClick={onClick}
 			className={cn(
 				"group px-2 py-2 rounded-md flex items-center gap-x-2 w-full hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition mb-1",
-				params?.channelId === channel.id && "bg-zinc-700/20 dark:bg-zinc-700"
+				params?.channelId === channel.id
+					? "bg-zinc-700/20 dark:bg-zinc-700"
+					: ""
 			)}
 		>
 			<Icon className="flex-shrink-1 w-5 h-5 text-neutral-400" />
 			<p
 				className={cn(
 					"line-clamp-1 font-semibold text-xs text-neutral-500 group-hover:text-neutral-600 dark:text-neutral-400 dark:group-hover:text-neutral-300 transition",
-					params?.channelId === channel.id &&
-						"text-primary dark:text-neutral-200 dark:group-hover:text-white"
+					params?.channelId === channel.id
+						? "text-primary dark:text-neutral-200 dark:group-hover:text-white"
+						: ""
 				)}
 			>
 				{channel.name}
 			</p>
 
 			{/* only mods and admin can see edit and delete icons */}
-			{channel.name !== "general" && role !== MemberRole.GUEST && (
+			{channel.name !== "general" && role !== MemberRole.GUEST ? (
 				<div className="ml-auto flex items-center gap-x-2">
 					<ActionTooltip label="Edit">
 						<Edit
@@ -77,10 +80,10 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 						/>
 					</ActionTooltip>
 				</div>
-			)}
-			{channel.name === "general" && (
+			) : null}
+			{channel.name === "general" ? (
 				<Lock className="ml-auto h-4 w-4 text-neutral-500 dark:text-neutral-400" />
-			)}
+			) : null}
 		</button>
 	);
 };

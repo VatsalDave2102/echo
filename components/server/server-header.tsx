@@ -42,7 +42,7 @@ export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 				</button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56 text-xs font-medium text-black dark:text-neutral-400 space-y-[2px] bg-[#222222]">
-				{isModerator && (
+				{isModerator ? (
 					<DropdownMenuItem
 						className="text-rose-600 dark:text-rose-400 px-3 py-2 text-sm cursor-pointer"
 						onClick={() => onOpen("invite", { server })}
@@ -50,8 +50,8 @@ export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 						Invite People
 						<UserPlus className="h-4 w-4 ml-auto" />
 					</DropdownMenuItem>
-				)}
-				{isAdmin && (
+				) : null}
+				{isAdmin ? (
 					<DropdownMenuItem
 						className="px-3 py-2 text-sm cursor-pointer"
 						onClick={() => onOpen("editServer", { server })}
@@ -59,8 +59,8 @@ export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 						Server Settings
 						<Settings className="h-4 w-4 ml-auto" />
 					</DropdownMenuItem>
-				)}
-				{isAdmin && (
+				) : null}
+				{isAdmin ? (
 					<DropdownMenuItem
 						className="px-3 py-2 text-sm cursor-pointer"
 						onClick={() => onOpen("members", { server })}
@@ -68,8 +68,8 @@ export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 						Manage Members
 						<Users className="h-4 w-4 ml-auto" />
 					</DropdownMenuItem>
-				)}
-				{isModerator && (
+				) : null}
+				{isModerator ? (
 					<DropdownMenuItem
 						className="px-3 py-2 text-sm cursor-pointer"
 						onClick={() => onOpen("createChannel")}
@@ -77,9 +77,9 @@ export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 						Create Channel
 						<PlusCircle className="h-4 w-4 ml-auto" />
 					</DropdownMenuItem>
-				)}
-				{isModerator && <DropdownMenuSeparator />}
-				{isAdmin && (
+				) : null}
+				{isModerator ? <DropdownMenuSeparator /> : null}
+				{isAdmin ? (
 					<DropdownMenuItem
 						className="text-red-700 dark:text-red-500 px-3 py-2 text-sm cursor-pointer"
 						onClick={() => onOpen("deleteServer", { server })}
@@ -87,8 +87,8 @@ export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 						Delete Server
 						<Trash className="h-4 w-4 ml-auto" />
 					</DropdownMenuItem>
-				)}
-				{!isAdmin && (
+				) : null}
+				{!isAdmin ? (
 					<DropdownMenuItem
 						className="text-red-700 dark:text-red-500 px-3 py-2 text-sm cursor-pointer"
 						onClick={() => onOpen("leaveServer", { server })}
@@ -96,7 +96,7 @@ export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 						Leave Server
 						<LogOut className="h-4 w-4 ml-auto" />
 					</DropdownMenuItem>
-				)}
+				) : null}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

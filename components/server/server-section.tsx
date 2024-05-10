@@ -30,7 +30,7 @@ export const ServerSection: React.FC<ServerSectionProps> = ({
 			</p>
 
 			{/* button to add channel */}
-			{role !== MemberRole.GUEST && sectionType === "channels" && (
+			{role !== MemberRole.GUEST && sectionType === "channels" ? (
 				<ActionTooltip label="Create Channel" side="top">
 					<button
 						onClick={() => onOpen("createChannel", { channelType })}
@@ -39,10 +39,10 @@ export const ServerSection: React.FC<ServerSectionProps> = ({
 						<Plus className="h-4 w-4" />
 					</button>
 				</ActionTooltip>
-			)}
+			) : null}
 
 			{/* if section is member, then show manage members option */}
-			{role === MemberRole.ADMIN && sectionType === "members" && (
+			{role === MemberRole.ADMIN && sectionType === "members" ? (
 				<ActionTooltip label="Manage Members" side="top">
 					<button
 						onClick={() => onOpen("members", { server })}
@@ -51,7 +51,7 @@ export const ServerSection: React.FC<ServerSectionProps> = ({
 						<Settings className="h-4 w-4" />
 					</button>
 				</ActionTooltip>
-			)}
+			) : null}
 		</div>
 	);
 };

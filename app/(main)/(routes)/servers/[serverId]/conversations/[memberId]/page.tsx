@@ -68,10 +68,10 @@ export default async function MemberIdPage({
 				serverId={params.serverId}
 				type="conversation"
 			/>
-			{searchParams.video && (
+			{searchParams.video ? (
 				<MediaRoom chatId={conversation.id} video={true} audio={true} />
-			)}
-			{!searchParams.video && (
+			) : null}
+			{!searchParams.video ? (
 				<>
 					<ChatMessages
 						member={currentMember}
@@ -95,7 +95,7 @@ export default async function MemberIdPage({
 						}}
 					/>
 				</>
-			)}
+			) : null}
 		</div>
 	);
 }

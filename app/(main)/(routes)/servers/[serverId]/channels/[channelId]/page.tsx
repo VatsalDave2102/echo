@@ -48,7 +48,7 @@ export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 				serverId={channel.serverId}
 				type="channel"
 			/>
-			{channel.type === ChannelType.TEXT && (
+			{channel.type === ChannelType.TEXT ? (
 				<>
 					<ChatMessages
 						member={member}
@@ -71,14 +71,14 @@ export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 						}}
 					/>
 				</>
-			)}
+			) : null}
 
-			{channel.type === ChannelType.AUDIO && (
+			{channel.type === ChannelType.AUDIO ? (
 				<MediaRoom chatId={channel.id} video={false} audio={true} />
-			)}
-			{channel.type === ChannelType.VIDEO && (
+			) : null}
+			{channel.type === ChannelType.VIDEO ? (
 				<MediaRoom chatId={channel.id} video={true} audio={false} />
-			)}
+			) : null}
 		</div>
 	);
 }
