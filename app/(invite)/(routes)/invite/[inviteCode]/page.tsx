@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
@@ -6,6 +7,24 @@ import { currentProfile } from "@/lib/current-profile";
 interface InviteCodePageProps {
 	params: {
 		inviteCode: string;
+	};
+}
+
+// to generate metadata
+export async function generateMetadata({
+	params,
+}: InviteCodePageProps): Promise<Metadata> {
+	const inviteCode = params.inviteCode;
+
+	const server = await db.server.findFirst({
+		where: {
+			inviteCode,
+		},
+	});
+
+	return {
+		title: `Invitation from ${server?.name}`,
+		description: `An invitation sent from ${server?.name} to join it.`,
 	};
 }
 
@@ -22,7 +41,7 @@ export default async function InviteCodePage({ params }: InviteCodePageProps) {
 		redirect("/");
 	}
 
-	// checking for existing server with invite code
+	// checking user is already a part of server with invite code
 	const existingServer = await db.server.findFirst({
 		where: {
 			inviteCode: params.inviteCode,

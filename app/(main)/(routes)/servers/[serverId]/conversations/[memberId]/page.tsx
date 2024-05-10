@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 
@@ -6,8 +7,8 @@ import ChatInput from "@/components/chat/chat-input";
 import { currentProfile } from "@/lib/current-profile";
 import ChatHeader from "@/components/chat/chat-header";
 import ChatMessages from "@/components/chat/chat-messages";
-import { getOrCreateConversation } from "@/lib/conversation";
 import { MediaRoom } from "@/components/common/media-room";
+import { getOrCreateConversation } from "@/lib/conversation";
 
 interface MemberIdPageProps {
 	params: {
@@ -16,6 +17,32 @@ interface MemberIdPageProps {
 	};
 	searchParams: {
 		video?: boolean;
+	};
+}
+
+// to generate metadata
+export async function generateMetadata({
+	params,
+}: MemberIdPageProps): Promise<Metadata> {
+	const serverId = params.serverId;
+	const memberId = params.memberId;
+
+	const server = await db.server.findFirst({
+		where: {
+			id: serverId,
+		},
+	});
+
+	const member = await db.member.findUnique({
+		where: { id: memberId },
+		include: {
+			profile: true,
+		},
+	});
+
+	return {
+		title: `${member?.profile.name} | ${server?.name}`,
+		description: `Communicate with ${server?.name}`,
 	};
 }
 
