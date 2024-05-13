@@ -65,7 +65,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 			onUploadError={(error: Error) => {
 				console.log(error);
 			}}
-			className="ut-button:bg-rose-500 ut-label:text-rose-500"
+			className="ut-button:bg-rose-500 ut-label:text-rose-500 dark:border-zinc-300 ut-uploading:ut-button:bg-rose-800 hover:cursor-pointer"
 		/>
 	);
 };

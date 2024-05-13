@@ -160,7 +160,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
 							{timestamp}
 						</span>
 					</div>
-					{isImage && (
+					{isImage ? (
 						<a
 							href={fileUrl}
 							target="_blank"
@@ -174,8 +174,8 @@ const ChatItem: React.FC<ChatItemProps> = ({
 								className="object-cover"
 							/>
 						</a>
-					)}
-					{isPDF && (
+					) : null}
+					{isPDF ? (
 						<div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
 							<FileIcon className="h-10 w-10 fill-rose-200 stroke-rose-400" />
 							<a
@@ -187,8 +187,8 @@ const ChatItem: React.FC<ChatItemProps> = ({
 								PDF file
 							</a>
 						</div>
-					)}
-					{!fileUrl && !isEditing && (
+					) : null}
+					{!fileUrl && !isEditing ? (
 						<p
 							className={cn(
 								"text-sm text-zinc-600 dark:text-zinc-300",
@@ -201,8 +201,8 @@ const ChatItem: React.FC<ChatItemProps> = ({
 								<span className="text-[10px] mx-2 text-zinc-500">(edited)</span>
 							)}
 						</p>
-					)}
-					{!fileUrl && isEditing && (
+					) : null}
+					{!fileUrl && isEditing ? (
 						<Form {...form}>
 							<form
 								className="flex items-center w-full gap-x-2 pt-2"
@@ -234,10 +234,10 @@ const ChatItem: React.FC<ChatItemProps> = ({
 								Press escape to cancel, enter to save
 							</span>
 						</Form>
-					)}
+					) : null}
 				</div>
 			</div>
-			{canDeleteMessage && (
+			{canDeleteMessage ? (
 				<div className="hidden group-hover:flex items-center gap-x-2 absolute p-1 -top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
 					{canEditMessage && (
 						<ActionTooltip label="Edit">
@@ -259,7 +259,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
 						/>
 					</ActionTooltip>
 				</div>
-			)}
+			) : null}
 		</div>
 	);
 };

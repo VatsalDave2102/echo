@@ -133,7 +133,7 @@ export const ServerSidebar: React.FC<ServerSidebarProps> = async ({
 					/>
 				</div>
 				<Separator className="bg-zinc-200 dark:bg-zinc-700 rounded-md my-2" />
-				{!!textChannels?.length && (
+				{!!textChannels?.length ? (
 					<div className="mb-2">
 						<ServerSection
 							sectionType="channels"
@@ -152,9 +152,9 @@ export const ServerSidebar: React.FC<ServerSidebarProps> = async ({
 							))}
 						</div>
 					</div>
-				)}
+				) : null}
 
-				{!!audioChannels?.length && (
+				{!!audioChannels?.length ? (
 					<div className="mb-2">
 						<ServerSection
 							sectionType="channels"
@@ -173,8 +173,8 @@ export const ServerSidebar: React.FC<ServerSidebarProps> = async ({
 							))}
 						</div>
 					</div>
-				)}
-				{!!videoChannels?.length && (
+				) : null}
+				{!!videoChannels?.length ? (
 					<div className="mb-2">
 						<ServerSection
 							sectionType="channels"
@@ -193,8 +193,8 @@ export const ServerSidebar: React.FC<ServerSidebarProps> = async ({
 							))}
 						</div>
 					</div>
-				)}
-				{!!members?.length && (
+				) : null}
+				{!!members?.length ? (
 					<div className="mb-2">
 						<ServerSection
 							sectionType="members"
@@ -206,7 +206,7 @@ export const ServerSidebar: React.FC<ServerSidebarProps> = async ({
 							<ServerMember key={member.id} member={member} server={server} />
 						))}
 					</div>
-				)}
+				) : null}
 			</ScrollArea>
 		</div>
 	);

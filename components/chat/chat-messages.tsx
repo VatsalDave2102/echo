@@ -88,13 +88,13 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 	return (
 		<div ref={chatRef} className="flex-1 flex flex-col py-4 overflow-y-auto">
 			{/* empty div to cover space */}
-			{!hasNextPage && <div className="flex-1" />}
+			{!hasNextPage ? <div className="flex-1" /> : null}
 
 			{/* only show welcome message on last page */}
-			{!hasNextPage && <ChatWelcome type={type} name={name} />}
+			{!hasNextPage ? <ChatWelcome type={type} name={name} /> : null}
 
 			{/* show button to load previous message if there are */}
-			{hasNextPage && (
+			{hasNextPage ? (
 				<div className="flex justify-center">
 					{isFetchingNextPage ? (
 						<Loader2 className="h-6 w-6 text-zinc-500 animate-spin my-4" />
@@ -107,10 +107,10 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 						</button>
 					)}
 				</div>
-			)}
+			) : null}
 
 			{/* render messages */}
-			<div className="flex flex-col reverse mt-auto">
+			<div className="flex flex-col-reverse mt-auto">
 				{data?.pages?.map((group, i) => (
 					<Fragment key={i}>
 						{group.items.map((message: MessageWithMemberWithProfile) => (

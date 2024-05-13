@@ -34,12 +34,12 @@ export const InviteModal = () => {
 	// boolean to open/close modal
 	const isModalOpen = isOpen && type === "invite";
 
-	// generating invite url
-	const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
+	// invite code
+	const inviteCode = server?.inviteCode;
 
 	// function to copy the link to clipboard
 	const onCopy = () => {
-		navigator.clipboard.writeText(inviteUrl);
+		navigator.clipboard.writeText(inviteCode || "");
 		setCopied(true);
 
 		setTimeout(() => {
@@ -64,24 +64,29 @@ export const InviteModal = () => {
 
 	return (
 		<Dialog open={isModalOpen} onOpenChange={onClose}>
-			<DialogContent className="bg-white text-black p-0 overflow-hidden">
+			<DialogContent className="bg-white text-black p-0 overflow-hidden dark:bg-[#2b2d31] dark:text-zinc-200">
 				<DialogHeader className="pt-8 px-6">
 					<DialogTitle className="text-2xl text-center">
 						Invite People
 					</DialogTitle>
 				</DialogHeader>
 				<div className="p-6">
-					<Label className="uppercase text-xs font-bold text-neutral-500 dark: text-secondary/70">
-						Server invite link
+					<Label className="uppercase text-xs font-bold text-zinc-500 dark:text-zinc-200">
+						Server invite code
 					</Label>
 					<div className="flex items-center mt-2 gap-x-2">
 						<Input
-							className="bg-neutral-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+							className="bg-zinc-300/50 dark:bg-zinc-700 border-0 focus-visible:ring-0 text-black dark:text-white focus-visible:ring-offset-0"
 							readOnly
-							value={inviteUrl}
+							value={inviteCode}
 							disabled={isPending}
 						/>
-						<Button size="icon" onClick={onCopy} disabled={copied || isPending}>
+						<Button
+							size="icon"
+							onClick={onCopy}
+							disabled={copied || isPending}
+							className="dark:bg-zinc-700 dark:text-white dark:hover:bg-zinc-600"
+						>
 							{copied ? (
 								<Check className="h-4 w-4" />
 							) : (
@@ -92,11 +97,11 @@ export const InviteModal = () => {
 					<Button
 						variant={"link"}
 						size={"sm"}
-						className="text-xs text-neutral-500 mt-4"
+						className="text-xs text-zinc-500 dark:text-zinc-300 mt-4"
 						onClick={onNew}
 						disabled={isPending}
 					>
-						Generate a new link
+						Generate a new code
 						<RefreshCw className="w-4 h-4 ml-2" />
 					</Button>
 				</div>

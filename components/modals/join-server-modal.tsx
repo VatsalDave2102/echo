@@ -1,10 +1,9 @@
 "use client";
 
 import * as z from "zod";
-import axios from "axios";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -23,49 +22,39 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { ServerFormSchema } from "@/schemas";
+import { JoinServerSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modal-store";
-import { FileUpload } from "@/components/common/file-upload";
 
-export const EditServerModal = () => {
+// modal to join a server
+export const JoinServerModal = () => {
 	// hook to modal state
-	const { isOpen, onClose, type, data } = useModal();
+	const { isOpen, onClose, type } = useModal();
 	const router = useRouter();
 
 	// boolean to open/close modal
-	const isModalOpen = isOpen && type === "editServer";
-	const { server } = data;
+	const isModalOpen = isOpen && type === "joinServer";
 
 	// transition to disable fields
 	const [isPending, startTransition] = useTransition();
 
 	// react hook form
-	const form = useForm<z.infer<typeof ServerFormSchema>>({
-		resolver: zodResolver(ServerFormSchema),
+	const form = useForm<z.infer<typeof JoinServerSchema>>({
+		resolver: zodResolver(JoinServerSchema),
 		defaultValues: {
-			name: "",
-			imageUrl: "",
+			code: "",
 		},
 	});
-
-	useEffect(() => {
-		if (server) {
-			form.setValue("name", server.name);
-			form.setValue("imageUrl", server.imageUrl);
-		}
-	}, [server, form]);
 
 	const { handleSubmit, control } = form;
 
 	// form submit handler
-	const onSubmit = async (values: z.infer<typeof ServerFormSchema>) => {
-		// call server api to update server settings
+	const onSubmit = async (values: z.infer<typeof JoinServerSchema>) => {
+		// redirect to invite route
 		startTransition(async () => {
-			await axios.patch(`/api/servers/${server?.id}`, values);
-
 			form.reset();
+			router.push(`/invite/${values.code}`);
 			router.refresh();
 			onClose();
 		});
@@ -83,61 +72,41 @@ export const EditServerModal = () => {
 				{/* Form heading */}
 				<DialogHeader className="pt-8 px-6">
 					<DialogTitle className="text-2xl text-center">
-						Customize your server
+						Join a server
 					</DialogTitle>
 					{/* Form description */}
 					<DialogDescription className="text-center text-zinc-500 dark:text-zinc-300">
-						Give your server a unique name and image. You can always change it
-						later.
+						Enter an invite code to join a server.
 					</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
 					<form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
 						<div className="space-y-8 px-6">
-							{/* Image upload field */}
-							<div className="flex items-center justify-center text-center">
-								<FormField
-									control={control}
-									name="imageUrl"
-									render={({ field }) => (
-										<FormItem>
-											<FormControl>
-												<FileUpload
-													endpoint="serverImage"
-													value={field.value}
-													onChange={field.onChange}
-												/>
-											</FormControl>
-										</FormItem>
-									)}
-								/>
-							</div>
-
-							{/* Server name field */}
+							{/* Invite code field */}
 							<FormField
 								control={control}
-								name="name"
+								name="code"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-zinc-200">
-											Server name
+											Invite code
 										</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isPending}
 												className="bg-zinc-300/50 dark:bg-zinc-700 border-0 focus-visible:ring-0 text-black dark:text-white focus-visible:ring-offset-0"
-												placeholder="Enter server name"
+												placeholder="Enter invite code"
 												{...field}
 											/>
 										</FormControl>
-										<FormMessage />
+										<FormMessage className="text-rose-500" />
 									</FormItem>
 								)}
 							/>
 						</div>
 						<DialogFooter className="bg-gray-100 px-6 py-4 dark:bg-[#202124]">
 							<Button disabled={isPending} variant={"rose"} type="submit">
-								Save
+								Join
 							</Button>
 						</DialogFooter>
 					</form>

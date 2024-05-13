@@ -1,3 +1,13 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: {
+		template: "%s | Authentication",
+		default: "Authentication",
+	},
+	description: "Authenticate your account",
+};
+
 export default function AuthLayout({
 	children,
 }: {

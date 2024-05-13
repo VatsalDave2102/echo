@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
@@ -12,6 +13,29 @@ interface ChannedlIdPageProps {
 	params: {
 		serverId: string;
 		channelId: string;
+	};
+}
+
+// to generate metadata
+export async function generateMetadata({
+	params,
+}: ChannedlIdPageProps): Promise<Metadata> {
+	const serverId = params.serverId;
+	const channelId = params.channelId;
+
+	const server = await db.server.findFirst({
+		where: {
+			id: serverId,
+		},
+	});
+
+	const channel = await db.channel.findUnique({
+		where: { id: channelId },
+	});
+
+	return {
+		title: `${channel?.name} | ${server?.name}`,
+		description: `Communicate with ${server?.name}`,
 	};
 }
 
@@ -48,7 +72,7 @@ export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 				serverId={channel.serverId}
 				type="channel"
 			/>
-			{channel.type === ChannelType.TEXT && (
+			{channel.type === ChannelType.TEXT ? (
 				<>
 					<ChatMessages
 						member={member}
@@ -71,14 +95,14 @@ export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 						}}
 					/>
 				</>
-			)}
+			) : null}
 
-			{channel.type === ChannelType.AUDIO && (
+			{channel.type === ChannelType.AUDIO ? (
 				<MediaRoom chatId={channel.id} video={false} audio={true} />
-			)}
-			{channel.type === ChannelType.VIDEO && (
+			) : null}
+			{channel.type === ChannelType.VIDEO ? (
 				<MediaRoom chatId={channel.id} video={true} audio={false} />
-			)}
+			) : null}
 		</div>
 	);
 }

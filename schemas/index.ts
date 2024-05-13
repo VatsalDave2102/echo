@@ -57,3 +57,7 @@ export const MessageFileSchema = z.object({
 		message: "Attachment is required!",
 	}),
 });
+
+export const JoinServerSchema = z.object({
+	code: z.string().min(1),
+});
