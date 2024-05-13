@@ -79,14 +79,14 @@ export const EditServerModal = () => {
 
 	return (
 		<Dialog open={isModalOpen} onOpenChange={handleClose}>
-			<DialogContent className="bg-white text-black p-0 overflow-hidden">
+			<DialogContent className="bg-white text-black p-0 overflow-hidden dark:bg-[#2b2d31] dark:text-zinc-200">
 				{/* Form heading */}
 				<DialogHeader className="pt-8 px-6">
 					<DialogTitle className="text-2xl text-center">
 						Customize your server
 					</DialogTitle>
 					{/* Form description */}
-					<DialogDescription className="text-center text-neutral-500">
+					<DialogDescription className="text-center text-zinc-500 dark:text-zinc-300">
 						Give your server a unique name and image. You can always change it
 						later.
 					</DialogDescription>
@@ -119,13 +119,13 @@ export const EditServerModal = () => {
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="uppercase text-xs font-bold text-neutral-500 dark:text-secondary/70">
+										<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-zinc-200">
 											Server name
 										</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isPending}
-												className="bg-neutral-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+												className="bg-zinc-300/50 dark:bg-zinc-700 border-0 focus-visible:ring-0 text-black dark:text-white focus-visible:ring-offset-0"
 												placeholder="Enter server name"
 												{...field}
 											/>
@@ -135,7 +135,7 @@ export const EditServerModal = () => {
 								)}
 							/>
 						</div>
-						<DialogFooter className="bg-gray-100 px-6 py-4">
+						<DialogFooter className="bg-gray-100 px-6 py-4 dark:bg-[#202124]">
 							<Button disabled={isPending} variant={"rose"} type="submit">
 								Save
 							</Button>

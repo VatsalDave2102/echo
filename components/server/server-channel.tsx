@@ -52,12 +52,12 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 					: ""
 			)}
 		>
-			<Icon className="flex-shrink-1 w-5 h-5 text-neutral-400" />
+			<Icon className="flex-shrink-1 w-5 h-5 text-zinc-400" />
 			<p
 				className={cn(
-					"line-clamp-1 font-semibold text-xs text-neutral-500 group-hover:text-neutral-600 dark:text-neutral-400 dark:group-hover:text-neutral-300 transition",
+					"line-clamp-1 font-semibold text-xs text-zinc-500 group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-zinc-300 transition",
 					params?.channelId === channel.id
-						? "text-primary dark:text-neutral-200 dark:group-hover:text-white"
+						? "text-primary dark:text-zinc-200 dark:group-hover:text-white"
 						: ""
 				)}
 			>
@@ -70,19 +70,19 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 					<ActionTooltip label="Edit">
 						<Edit
 							onClick={(e) => onAction(e, "editChannel")}
-							className="h-4 w-4 hidden group-hover:block text-neutral-500 hover:text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-300 tranistion"
+							className="h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300 tranistion"
 						/>
 					</ActionTooltip>
 					<ActionTooltip label="Delete">
 						<Trash
 							onClick={(e) => onAction(e, "deleteChannel")}
-							className="h-4 w-4 hidden group-hover:block text-neutral-500 hover:text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-300 tranistion"
+							className="h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300 tranistion"
 						/>
 					</ActionTooltip>
 				</div>
 			) : null}
 			{channel.name === "general" ? (
-				<Lock className="ml-auto h-4 w-4 text-neutral-500 dark:text-neutral-400" />
+				<Lock className="ml-auto h-4 w-4 text-zinc-500 dark:text-zinc-400" />
 			) : null}
 		</button>
 	);

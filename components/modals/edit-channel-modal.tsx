@@ -89,7 +89,7 @@ export const EditChannelModal = () => {
 
 	return (
 		<Dialog open={isModalOpen} onOpenChange={handleClose}>
-			<DialogContent className="bg-white text-black p-0 overflow-hidden">
+			<DialogContent className="bg-white text-black p-0 overflow-hidden dark:bg-[#2b2d31] dark:text-zinc-200">
 				{/* Form heading */}
 				<DialogHeader className="pt-8 px-6">
 					<DialogTitle className="text-2xl text-center">
@@ -105,13 +105,13 @@ export const EditChannelModal = () => {
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel className="uppercase text-xs font-bold text-neutral-500 dark:text-secondary/70">
+										<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-zinc-200">
 											Channel name
 										</FormLabel>
 										<FormControl>
 											<Input
 												disabled={isPending}
-												className="bg-neutral-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+												className="bg-zinc-300/50 dark:bg-zinc-700 border-0 focus-visible:ring-0 text-black dark:text-white focus-visible:ring-offset-0"
 												placeholder="Enter channel name"
 												{...field}
 											/>
@@ -133,7 +133,7 @@ export const EditChannelModal = () => {
 											defaultValue={field.value}
 										>
 											<FormControl>
-												<SelectTrigger className="bg-neutral-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none">
+												<SelectTrigger className="bg-zinc-300/50 dark:bg-zinc-700 border-0 focus:ring-0 text-black dark:text-white ring-offset-0 focus:ring-offset-0 capitalize outline-none">
 													<SelectValue placeholder="Select a channel type" />
 												</SelectTrigger>
 											</FormControl>
@@ -154,7 +154,7 @@ export const EditChannelModal = () => {
 								)}
 							/>
 						</div>
-						<DialogFooter className="bg-gray-100 px-6 py-4">
+						<DialogFooter className="bg-gray-100 px-6 py-4 dark:bg-[#202124]">
 							<Button disabled={isPending} variant={"rose"} type="submit">
 								Save
 							</Button>

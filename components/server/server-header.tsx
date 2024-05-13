@@ -28,23 +28,23 @@ interface ServerHeaderProps {
 
 export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 	const { onOpen } = useModal();
+
 	// booleans for admin and moderators
 	const isAdmin = role === MemberRole.ADMIN;
-
 	const isModerator = isAdmin || role === MemberRole.MODERATOR;
 
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger className="focus:outline-none" asChild>
-				<button className="w-full text-md font-semibold px-3 flex items-center h-12 border-neutral-200 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition">
+				<button className="w-full text-md font-semibold px-3 flex items-center h-12 border-zinc-200 dark:border-zinc-800 border-b-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition">
 					{server.name}
 					<ChevronDown className="h-5 w-5 ml-auto" />
 				</button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-56 text-xs font-medium text-black dark:text-neutral-400 space-y-[2px] bg-[#222222]">
+			<DropdownMenuContent className="w-56 font-medium text-black dark:text-zinc-400 space-y-[2px] dark:bg-[#222222]">
 				{isModerator ? (
 					<DropdownMenuItem
-						className="text-rose-600 dark:text-rose-400 px-3 py-2 text-sm cursor-pointer"
+						className="text-rose-600 dark:text-rose-400 px-3 py-2 text-sm cursor-pointer focus:text-rose-700 dark:focus:text-rose-500"
 						onClick={() => onOpen("invite", { server })}
 					>
 						Invite People
@@ -81,7 +81,7 @@ export const ServerHeader: React.FC<ServerHeaderProps> = ({ server, role }) => {
 				{isModerator ? <DropdownMenuSeparator /> : null}
 				{isAdmin ? (
 					<DropdownMenuItem
-						className="text-red-700 dark:text-red-500 px-3 py-2 text-sm cursor-pointer"
+						className="text-red-700 dark:text-red-500 focus:text-red-800 dark:focus:text-red-600 px-3 py-2 text-sm cursor-pointer"
 						onClick={() => onOpen("deleteServer", { server })}
 					>
 						Delete Server
