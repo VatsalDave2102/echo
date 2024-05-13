@@ -70,13 +70,13 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 					<ActionTooltip label="Edit">
 						<Edit
 							onClick={(e) => onAction(e, "editChannel")}
-							className="h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300 tranistion"
+							className="h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300  transition"
 						/>
 					</ActionTooltip>
 					<ActionTooltip label="Delete">
 						<Trash
 							onClick={(e) => onAction(e, "deleteChannel")}
-							className="h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300 tranistion"
+							className="h-4 w-4 hidden group-hover:block text-zinc-500 hover:text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300  transition"
 						/>
 					</ActionTooltip>
 				</div>

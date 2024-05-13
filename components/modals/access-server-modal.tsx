@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import {
 	Dialog,
 	DialogContent,
@@ -11,23 +9,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 
-export const InitialModal = () => {
-	// state to check whether modal mounted or not, due to hydration error
-	const [isMounted, setIsMounted] = useState(false);
+// modal to create or join servers
+export const AccessServerModal = () => {
+	// hook to modal state
+	const { onOpen, isOpen, onClose, type } = useModal();
 
-	const { onOpen, onClose } = useModal();
-
-	// effect to set isMounted true once the modal mounts
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
-
-	if (!isMounted) {
-		return null;
-	}
+	// boolean to open/close modal
+	const isModalOpen = isOpen && type === "accessServer";
 
 	return (
-		<Dialog open>
+		<Dialog open={isModalOpen} onOpenChange={onClose}>
 			<DialogContent className="bg-white text-black p-0 overflow-hidden dark:bg-[#2b2d31] dark:text-zinc-200">
 				<DialogHeader className="pt-8 px-6">
 					<DialogTitle className="text-2xl text-center">
@@ -38,7 +29,7 @@ export const InitialModal = () => {
 					<div className="flex flex-col mt-2 gap-y-2 ">
 						<div className="py-2 px-4 flex flex-col gap-y-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50  text-zinc-500 hover:text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300  transition">
 							<p>
-								Initiate your own Discord server and unleash your creativity by
+								Initiate your own server and unleash your creativity by
 								customizing channels, roles, and permissions
 							</p>
 							<Button

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/current-profile";
@@ -57,23 +57,37 @@ export default async function InviteCodePage({ params }: InviteCodePageProps) {
 		redirect(`/servers/${existingServer.id}`);
 	}
 
-	const server = await db.server.update({
+	// check if a server exists with the given invite code
+	const server = await db.server.findFirst({
 		where: {
 			inviteCode: params.inviteCode,
 		},
-		data: {
-			members: {
-				create: [
-					{
-						profileId: profile.id,
-					},
-				],
-			},
-		},
 	});
 
+	// if exists, update server and add member
 	if (server) {
-		redirect(`/servers/${server.id}`);
+		const updatedServer = await db.server.update({
+			where: {
+				inviteCode: params.inviteCode,
+			},
+			data: {
+				members: {
+					create: [
+						{
+							profileId: profile.id,
+						},
+					],
+				},
+			},
+		});
+
+		// if server is updated, redirect user to new server
+		if (updatedServer) {
+			redirect(`/servers/${updatedServer.id}`);
+		}
+	} else {
+		notFound();
 	}
+
 	return null;
 }
