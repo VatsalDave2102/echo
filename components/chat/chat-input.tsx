@@ -7,13 +7,13 @@ import { Plus } from "lucide-react";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { ChatInputSchema } from "@/schemas";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal-store";
 import EmojiPicker from "@/components/common/emoji-picker";
 import { Form, FormItem, FormField, FormControl } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
 
 interface ChatInputProps {
 	apiUrl: string;
