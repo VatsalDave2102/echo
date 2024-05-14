@@ -11,6 +11,11 @@ interface ServerIdLayoutProps {
 	params: { serverId: string };
 }
 
+interface ServerIdLayoutProps {
+	children: React.ReactNode;
+	params: { serverId: string };
+}
+
 export default async function ServerIdLayout({
 	children,
 	params,

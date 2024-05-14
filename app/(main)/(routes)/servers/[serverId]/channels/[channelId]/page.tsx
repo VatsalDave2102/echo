@@ -16,6 +16,29 @@ interface ChannedlIdPageProps {
 	};
 }
 
+// to generate metadata
+export async function generateMetadata({
+	params,
+}: ChannedlIdPageProps): Promise<Metadata> {
+	const serverId = params.serverId;
+	const channelId = params.channelId;
+
+	const server = await db.server.findFirst({
+		where: {
+			id: serverId,
+		},
+	});
+
+	const channel = await db.channel.findUnique({
+		where: { id: channelId },
+	});
+
+	return {
+		title: `${channel?.name} | ${server?.name}`,
+		description: `Communicate with ${server?.name}`,
+	};
+}
+
 export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 	const profile = await currentProfile();
 
@@ -42,7 +65,6 @@ export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 				serverId={channel.serverId}
 				type="channel"
 			/>
-
 			{channel.type === ChannelType.TEXT ? (
 				<>
 					<ChatMessages

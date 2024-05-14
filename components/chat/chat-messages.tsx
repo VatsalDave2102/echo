@@ -88,7 +88,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 
 			{/* only show welcome message on last page */}
 			{hasNextPage === false ? <ChatWelcome type={type} name={name} /> : null}
-
+ 
 			{/* show button to load previous message if there are */}
 			{hasNextPage ? (
 				<div className="flex justify-center">
