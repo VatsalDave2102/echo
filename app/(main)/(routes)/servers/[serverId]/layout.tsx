@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/current-profile";
 import { ServerSidebar } from "@/components/server/server-sidebar";
+import { ServerSidebarSkeleton } from "@/components/skeletons/server-sidebar-skeleton";
 
 interface ServerIdLayoutProps {
 	children: React.ReactNode;
@@ -36,7 +38,9 @@ export default async function ServerIdLayout({
 	return (
 		<div className="h-full">
 			<div className="hidden md:flex h-full w-60 z-20 flex-col fixed inset-y-0">
-				<ServerSidebar serverId={params.serverId} />
+				<Suspense fallback={<ServerSidebarSkeleton />}>
+					<ServerSidebar serverId={params.serverId} />
+				</Suspense>
 			</div>
 			<main className="h-full md:pl-60">{children}</main>
 		</div>

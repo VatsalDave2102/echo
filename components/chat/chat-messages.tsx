@@ -11,6 +11,7 @@ import { MessageWithMemberWithProfile } from "@/types";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
 import { useChatSocket } from "@/hooks/use-chat-socket";
 import ChatWelcome from "@/components/chat/chat-welcome";
+import { ChatMessagesSkeleton } from "@/components/skeletons/chat-messages-skeleton";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -64,12 +65,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 
 	// if messages are loading
 	if (status === "loading") {
-		<div className="flex flex-col flex-1 justify-center items-center">
-			<Loader2 className="h-7 w-7 text-zinc-500 animate-spin my-4" />
-			<p className="text-xs text-zinc-500 dark:text-zinc-400">
-				Loading messages...
-			</p>
-		</div>;
+		return <ChatMessagesSkeleton />;
 	}
 
 	// if there is an issue while fetching messages
@@ -88,10 +84,10 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
 	return (
 		<div ref={chatRef} className="flex-1 flex flex-col py-4 overflow-y-auto">
 			{/* empty div to cover space */}
-			{!hasNextPage ? <div className="flex-1" /> : null}
+			{hasNextPage === false ? <div className="flex-1" /> : null}
 
 			{/* only show welcome message on last page */}
-			{!hasNextPage ? <ChatWelcome type={type} name={name} /> : null}
+			{hasNextPage === false ? <ChatWelcome type={type} name={name} /> : null}
 
 			{/* show button to load previous message if there are */}
 			{hasNextPage ? (

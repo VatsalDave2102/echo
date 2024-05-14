@@ -16,29 +16,6 @@ interface ChannedlIdPageProps {
 	};
 }
 
-// to generate metadata
-export async function generateMetadata({
-	params,
-}: ChannedlIdPageProps): Promise<Metadata> {
-	const serverId = params.serverId;
-	const channelId = params.channelId;
-
-	const server = await db.server.findFirst({
-		where: {
-			id: serverId,
-		},
-	});
-
-	const channel = await db.channel.findUnique({
-		where: { id: channelId },
-	});
-
-	return {
-		title: `${channel?.name} | ${server?.name}`,
-		description: `Communicate with ${server?.name}`,
-	};
-}
-
 export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 	const profile = await currentProfile();
 
@@ -47,19 +24,12 @@ export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 	}
 
 	// get channel
-	const channel = await db.channel.findUnique({
-		where: {
-			id: params.channelId,
-		},
-	});
+	const channelData = getChannel(params.channelId);
 
 	// get member to verify only channel member is accessing the channel
-	const member = await db.member.findFirst({
-		where: {
-			serverId: params.serverId,
-			profileId: profile.id,
-		},
-	});
+	const memberData = getMember(params.serverId, profile.id);
+
+	const [channel, member] = await Promise.all([channelData, memberData]);
 
 	// if channel not found or member is not in channel
 	if (!channel || !member) {
@@ -72,6 +42,7 @@ export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 				serverId={channel.serverId}
 				type="channel"
 			/>
+
 			{channel.type === ChannelType.TEXT ? (
 				<>
 					<ChatMessages
@@ -105,4 +76,48 @@ export default async function ChannelPage({ params }: ChannedlIdPageProps) {
 			) : null}
 		</div>
 	);
+}
+
+// to generate metadata
+export async function generateMetadata({
+	params,
+}: ChannedlIdPageProps): Promise<Metadata> {
+	const serverData = getServer(params.serverId);
+
+	const channelData = getChannel(params.channelId);
+
+	const [channel, server] = await Promise.all([channelData, serverData]);
+
+	return {
+		title: `${channel?.name} | ${server?.name}`,
+		description: `Communicate with ${server?.name}`,
+	};
+}
+
+async function getChannel(channelId: string) {
+	const channel = await db.channel.findUnique({
+		where: {
+			id: channelId,
+		},
+	});
+	return channel;
+}
+
+async function getMember(serverId: string, profileId: string) {
+	const member = await db.member.findFirst({
+		where: {
+			serverId: serverId,
+			profileId: profileId,
+		},
+	});
+	return member;
+}
+
+async function getServer(serverId: string) {
+	const server = await db.server.findFirst({
+		where: {
+			id: serverId,
+		},
+	});
+	return server;
 }
