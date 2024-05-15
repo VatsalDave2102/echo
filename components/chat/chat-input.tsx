@@ -36,7 +36,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ apiUrl, query, name, type }) => {
 		resolver: zodResolver(ChatInputSchema),
 	});
 
-	const { handleSubmit, control, reset } = form;
+	const { handleSubmit, control, reset, setFocus } = form;
 
 	const onSubmit = (values: z.infer<typeof ChatInputSchema>) => {
 		try {
@@ -47,6 +47,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ apiUrl, query, name, type }) => {
 			startTransition(async () => {
 				await axios.post(url, values);
 				reset();
+				setFocus("content");
 				router.refresh();
 			});
 		} catch (error) {
@@ -74,6 +75,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ apiUrl, query, name, type }) => {
 									{/* input field */}
 									<Input
 										disabled={isPending}
+										autoFocus
 										{...field}
 										placeholder={`Message ${
 											type === "conversation" ? name : "#" + name

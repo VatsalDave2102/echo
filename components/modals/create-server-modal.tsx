@@ -49,7 +49,7 @@ export const CreateServerModal = () => {
 		},
 	});
 
-	const { handleSubmit, control } = form;
+	const { handleSubmit, control, setError } = form;
 
 	// form submit handler
 	const onSubmit = async (values: z.infer<typeof ServerFormSchema>) => {
@@ -97,8 +97,11 @@ export const CreateServerModal = () => {
 													endpoint="serverImage"
 													value={field.value}
 													onChange={field.onChange}
+													setError={setError}
+													fieldName={"imageUrl"}
 												/>
 											</FormControl>
+											<FormMessage className="text-rose-500" />
 										</FormItem>
 									)}
 								/>

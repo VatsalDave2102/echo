@@ -4,17 +4,25 @@ import Image from "next/image";
 import { FileIcon, X } from "lucide-react";
 
 import { UploadDropzone } from "@/lib/uploadthing";
+import { FieldValues, Path, UseFormSetError } from "react-hook-form";
+import { MessageFileSchema, ServerFormSchema } from "@/schemas";
+import { UploadThingError } from "uploadthing/server";
+import { Json } from "@uploadthing/shared";
 
-interface FileUploadProps {
+interface FileUploadProps<T extends FieldValues> {
 	endpoint: "serverImage" | "messageFile";
 	value: string;
 	onChange: (url?: string) => void;
+	setError: UseFormSetError<T>;
+	fieldName: Path<T>;
 }
-export const FileUpload: React.FC<FileUploadProps> = ({
+export const FileUpload = <T extends {}>({
 	endpoint,
 	value,
 	onChange,
-}) => {
+	setError,
+	fieldName,
+}: FileUploadProps<T>) => {
 	const fileType = value?.split(".").pop();
 
 	// if already there's an image
@@ -62,10 +70,15 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 			onClientUploadComplete={(res) => {
 				onChange(res?.[0].url);
 			}}
-			onUploadError={(error: Error) => {
+			onUploadError={(error: UploadThingError<Json>) => {
+				if (error.code === "TOO_LARGE") {
+					setError(fieldName, {
+						message: "File too large, upload less than 4MB",
+					});
+				}
 				console.log(error);
 			}}
-			className="ut-button:bg-rose-500 ut-label:text-rose-500 dark:border-zinc-300 ut-uploading:ut-button:bg-rose-800 hover:cursor-pointer"
+			className="ut-button:bg-rose-500 ut-label:text-rose-500 dark:border-zinc-300 ut-uploading:ut-button:bg-rose-800 hover:cursor-pointer ut-allowed-content:dark:text-zinc-300"
 		/>
 	);
 };

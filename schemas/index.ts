@@ -59,5 +59,7 @@ export const MessageFileSchema = z.object({
 });
 
 export const JoinServerSchema = z.object({
-	code: z.string().min(1),
+	code: z.string().min(1, {
+		message: "Invitation code is required",
+	}),
 });

@@ -16,7 +16,13 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+} from "@/components/ui/form";
 import { MessageFileSchema } from "@/schemas";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modal-store";
@@ -40,7 +46,7 @@ export const MessageFileModal = () => {
 		},
 	});
 
-	const { handleSubmit, control, reset } = form;
+	const { handleSubmit, control, reset, setError } = form;
 
 	const handleClose = () => {
 		reset();
@@ -94,8 +100,11 @@ export const MessageFileModal = () => {
 													endpoint="messageFile"
 													value={field.value}
 													onChange={field.onChange}
+													setError={setError}
+													fieldName={"fileUrl"}
 												/>
 											</FormControl>
+											<FormMessage className="text-rose-500" />
 										</FormItem>
 									)}
 								/>
