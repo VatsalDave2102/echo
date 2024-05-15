@@ -5,7 +5,15 @@ import { ModalType, useModal } from "@/hooks/use-modal-store";
 import { useParams, useRouter } from "next/navigation";
 import { Edit, Hash, Lock, Mic, Trash, Video } from "lucide-react";
 import { ActionTooltip } from "@/components/common/action-tooltip";
-import { Channel, ChannelType, MemberRole, Server } from "@prisma/client";
+import {
+	Channel,
+	ChannelType,
+	MemberRole,
+	Message,
+	Server,
+} from "@prisma/client";
+import { useSocket } from "../providers/socket-provider";
+import { useEffect, useState } from "react";
 
 interface ServerChannelProps {
 	channel: Channel;
@@ -28,13 +36,41 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 	const { onOpen } = useModal();
 	const router = useRouter();
 	const params = useParams();
+	const { socket } = useSocket();
+	const [hasNewMessages, setHasNewMessages] = useState(false);
+	const [visited, setVisited] = useState(false);
 
 	const Icon = iconMap[channel.type];
 
 	// redirect user to channel conversation
 	const onClick = () => {
+		setVisited(true);
 		router.push(`/servers/${params?.serverId}/channels/${channel.id}`);
 	};
+
+	useEffect(() => {
+		if (!socket) return;
+
+		const channelKey = `chat:${channel.id}:messages`;
+
+		const handleNewMessage = (message: Message) => {
+			console.log(message.channelId, channel.id);
+			if (message.channelId === channel.id) {
+				console.log("true");
+				setHasNewMessages(true);
+			}
+		};
+
+		socket.on(channelKey, handleNewMessage);
+
+		return () => {
+			socket.off(channelKey, handleNewMessage);
+		};
+	}, [socket, channel]);
+
+	useEffect(() => {
+		setHasNewMessages(false);
+	}, [params?.channelId]);
 
 	// to prevent event propagation, when edit/delete is clicked,
 	// the onClick handler on channel button is also trigger
@@ -42,6 +78,7 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 		e.stopPropagation();
 		onOpen(action, { server, channel });
 	};
+
 	return (
 		<button
 			onClick={onClick}
@@ -52,7 +89,12 @@ export const ServerChannel: React.FC<ServerChannelProps> = ({
 					: ""
 			)}
 		>
-			<Icon className="flex-shrink-1 w-5 h-5 text-zinc-400" />
+			<Icon
+				className={cn(
+					"flex-shrink-1 w-5 h-5",
+					hasNewMessages && !visited ? "text-rose-500" : "text-zinc-400"
+				)}
+			/>
 			<p
 				className={cn(
 					"line-clamp-1 font-semibold text-xs text-zinc-500 group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-zinc-300 transition",
